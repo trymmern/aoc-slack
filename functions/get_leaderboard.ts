@@ -31,13 +31,13 @@ export default SlackFunction(
     const url = inputs.url;
 
     const jsonData = await fetch(url, {
-      method: "GET",
       credentials: "include",
       headers: {
         Authorization: env.cookie,
       },
     })
-      .then((res) => {
+      .then(async (res) => {
+        console.log("res: ", await res.json()); // TODO: get json file instead of stupid html doctype
         const json = res.json();
         console.log("HELLO!", json);
         return json;
@@ -47,22 +47,3 @@ export default SlackFunction(
     return { outputs: { jsonData: jsonData } };
   },
 );
-
-// function getPromise() {
-//   return new Promise(function (resolve, reject) {
-//     setTimeout(function () {
-//       resolve({ "country": "INDIA" });
-//     }, 2000);
-//   });
-// }
-
-// async function getResult() {
-//   let result = await getPromise();
-//   return result;
-// }
-
-// async function doTask() {
-//   let data = await getResult();
-//   console.log(data);
-// }
-// doTask();
