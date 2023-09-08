@@ -1,5 +1,6 @@
 import { TriggerTypes } from "deno-slack-api/mod.ts";
 import { Trigger } from "deno-slack-api/types.ts";
+import env from "../env.json" assert { type: "json" };
 import LeaderboardWorkflowDef from "../workflows/leaderboard.ts";
 
 const trigger: Trigger<typeof LeaderboardWorkflowDef.definition> = {
@@ -9,11 +10,10 @@ const trigger: Trigger<typeof LeaderboardWorkflowDef.definition> = {
   workflow: `#/workflows/${LeaderboardWorkflowDef.definition.callback_id}`,
   inputs: {
     channel: {
-      value: "C05RHUZSB6E",
+      value: env.channelId,
     },
     url: {
-      value:
-        "https://adventofcode.com/2022/leaderboard/private/view/1537702.json",
+      value: env.url,
     },
   },
 };
