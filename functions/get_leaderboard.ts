@@ -1,4 +1,5 @@
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
+import cred from "../credentials.json" assert { type: "json" };
 
 export const GetLeaderboardFunctionDef = DefineFunction({
   callback_id: "get_leaderboard_function",
@@ -33,7 +34,7 @@ export default SlackFunction(
       method: "GET",
       credentials: "include",
       headers: {
-        Authorization: "",
+        Authorization: cred.cookie,
       },
     })
       .then((res) => {
