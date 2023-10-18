@@ -28,22 +28,23 @@ export const GetLeaderboardFunctionDef = DefineFunction({
 export default SlackFunction(
   GetLeaderboardFunctionDef,
   async ({ inputs }) => {
-    const url = inputs.url;
+    try {
+      const jsonData = await fetch(inputs.url, {
+        credentials: "include",
+        headers: {
+          Cookie: env.cookie,
+        },
+      }).then((res: Response) => {
+        if (res.status === 200) return res.json();
+        else throw new Error(`HTTP Error: ${res.status}`);
+      });
 
-    const jsonData = await fetch(url, {
-      credentials: "include",
-      headers: {
-        Authorization: env.cookie,
-      },
-    })
-      .then(async (res) => {
-        console.log("res: ", await res.json()); // TODO: get json file instead of stupid html doctype
-        const json = res.json();
-        console.log("HELLO!", json);
-        return json;
-      })
-      .catch((e) => console.error(e));
-
-    return { outputs: { jsonData: jsonData } };
+      return { outputs: { jsonData: jsonData } };
+    } catch (e) {
+      console.error(e);
+      return {
+        error: `An error occurred: ${e}`,
+      };
+    }
   },
 );
